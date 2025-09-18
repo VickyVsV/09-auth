@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import type { NoteTag } from '@/types/note';
 import css from './NoteForm.module.css';
 import { useMutation } from '@tanstack/react-query';
-import { createNote } from '@/lib/api';
+import { createNoteClient } from '@/lib/api/clientApi';
 import { NewNote } from '@/types/note';
 import { useNoteDraftStore } from '@/lib/store/noteStore';
 import { useState } from 'react';
@@ -32,7 +32,7 @@ const NoteForm = ({ tags }: Props) => {
   };
 
   const { mutate } = useMutation({
-    mutationFn: createNote,
+    mutationFn: createNoteClient,
     onSuccess: () => {
       clearDraft();
       router.push('/notes/filter/all');

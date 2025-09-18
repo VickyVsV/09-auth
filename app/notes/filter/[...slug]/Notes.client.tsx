@@ -6,12 +6,12 @@ import { useDebounce } from 'use-debounce';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
-import { fetchNotes } from '@/lib/api';
-import type { GetNote } from '@/lib/api';
+import { fetchNotesClient } from '@/lib/api/clientApi';
+import type {GetNotesResponse } from '@/types/note';
 import Link from 'next/link';
 
 interface NotesProps {
-  initialData: GetNote;
+  initialData: GetNotesResponse;
   tag: string | null; // SSR данные приходят отсюда
 }
 
@@ -27,10 +27,10 @@ export default function NotesPage({ initialData, tag }: NotesProps) {
     setCurrentPage(1);
   };
 
-  const { data, isLoading } = useQuery<GetNote>({
+  const { data, isLoading } = useQuery<GetNotesResponse>({
     queryKey: ['notes', searchValueDebonce, currentPage, tag],
     queryFn: () =>
-      fetchNotes(searchValueDebonce, currentPage, perPage, tag || undefined),
+      fetchNotesClient(searchValueDebonce, currentPage, perPage, tag || undefined),
     placeholderData: keepPreviousData,
     initialData,
   });

@@ -4,7 +4,7 @@ import {
   dehydrate,
   HydrationBoundary,
 } from '@tanstack/react-query';
-import { getSingleNote } from '@/lib/api';
+import { getSingleNoteClient } from '@/lib/api/clientApi';
 import NotePreview from './NotePreview.client';
 
 type Props = {
@@ -17,7 +17,7 @@ const PreviewPage = async ({ params }: Props) => {
 
   await queryClient.prefetchQuery({
     queryKey: ['note', id],
-    queryFn: () => getSingleNote(id),
+    queryFn: () => getSingleNoteClient(id),
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

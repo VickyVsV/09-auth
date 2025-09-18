@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { getSingleNote } from '@/lib/api';
+import { getSingleNoteClient } from '@/lib/api/clientApi';
 import Modal from '@/components/Modal/Modal';
 import css from './NotePreview.client.module.css';
 
@@ -19,7 +19,7 @@ export default function NotePreviewClient({ id }: Props) {
     error,
   } = useQuery({
     queryKey: ['note', id],
-    queryFn: () => getSingleNote(id),
+    queryFn: () => getSingleNoteClient(id),
   });
 
   const handleClose = () => {

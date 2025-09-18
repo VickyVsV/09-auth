@@ -2,7 +2,7 @@ import css from './NoteList.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import type { Note } from '../../types/note';
-import { deleteNote } from '../../lib/api';
+import { deleteNoteClient  } from '../../lib/api/clientApi';
 import Link from "next/link";
 
 interface NoteListProps {
@@ -13,7 +13,7 @@ export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
 
   const mutationDel = useMutation({
-    mutationFn: (id: string) => deleteNote(id),
+    mutationFn: (id: string) => deleteNoteClient (id),
     onSuccess: () => {
       // 3. Коли мутація успішно виконується,
       // інвалідовуємо всі запити з ключем "notes"

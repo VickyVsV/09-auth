@@ -1,4 +1,4 @@
-import { fetchNotes } from '@/lib/api';
+import { fetchNotesServer  } from '@/lib/api/serverApi';
 import Notes from './Notes.client';
 import type { Metadata } from 'next';
 
@@ -25,7 +25,7 @@ export default async function NotesPage({ params }: Props) {
   const { slug } = await params;
   const tag = slug?.[0] === 'all' ? null : (slug?.[0] ?? null);
   // SSR загрузка первой страницы без поиска
-  const initialData = await fetchNotes('', 1, 12);
+  const initialData = await fetchNotesServer ('', 1, 12);
 
   return <Notes initialData={initialData} tag={tag} />;
 }
