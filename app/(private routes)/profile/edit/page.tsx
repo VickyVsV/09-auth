@@ -1,4 +1,3 @@
-// EditProfilePage.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -59,7 +58,6 @@ export default function EditProfilePage() {
           className={css.avatar}
         />
 
-        {/* 4. Вешаем обработчик на onSubmit формы */}
         <form className={css.profileInfo} onSubmit={handleSave}>
           <div className={css.usernameWrapper}>
             <label htmlFor="username">Username:</label>

@@ -1,8 +1,8 @@
-import axios from "axios";
-import { api } from "./api";
-import type { Note, NewNote, GetNotesResponse } from "@/types/note";
-import type { User } from "@/types/user";
-import { cookies } from "next/headers";
+import axios from 'axios';
+import { api } from './api';
+import type { Note, NewNote, GetNotesResponse } from '@/types/note';
+import type { User } from '@/types/user';
+import { cookies } from 'next/headers';
 
 /** Возвращает объект headers с cookie (если есть) */
 async function getCookieHeaders() {
@@ -14,7 +14,7 @@ async function getCookieHeaders() {
 /* ----------------- Auth ----------------- */
 export async function getSessionServer(): Promise<User | null> {
   try {
-    const { data } = await api.get<User>("/auth/session", {
+    const { data } = await api.get<User>('/auth/session', {
       headers: await getCookieHeaders(),
     });
     return data ?? null;
@@ -24,7 +24,7 @@ export async function getSessionServer(): Promise<User | null> {
 }
 
 /* ----------------- User ----------------- */
-export async function getUserProfileServer(): Promise<User> {
+/* export async function getUserProfileServer(): Promise<User> {
   try {
     const { data } = await api.get<User>("/users/me", {
       headers: await getCookieHeaders(),
@@ -34,36 +34,59 @@ export async function getUserProfileServer(): Promise<User> {
     if (axios.isAxiosError(err)) throw new Error(err.response?.data?.message || err.message);
     throw new Error("Failed to fetch user profile (server)");
   }
+} */
+
+  
+//явно сообщает Next.js, что страница зависит от заголовков запроса
+export async function getUserProfileServer(): Promise<User> {
+  try {
+    const cookieStore = cookies();
+    const headers = {
+      Cookie: cookieStore.toString(),
+    };
+    const { data } = await api.get<User>('/users/me', {
+      headers: headers,
+    });
+    return data;
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err))
+      throw new Error(err.response?.data?.message || err.message);
+    throw new Error('Failed to fetch user profile (server)');
+  }
 }
 
-export async function updateUserProfileServer(payload: Partial<User>): Promise<User> {
+export async function updateUserProfileServer(
+  payload: Partial<User>
+): Promise<User> {
   try {
-    const { data } = await api.patch<User>("/users/me", payload, {
+    const { data } = await api.patch<User>('/users/me', payload, {
       headers: await getCookieHeaders(),
     });
     return data;
   } catch (err: unknown) {
-    if (axios.isAxiosError(err)) throw new Error(err.response?.data?.message || err.message);
-    throw new Error("Failed to update user profile (server)");
+    if (axios.isAxiosError(err))
+      throw new Error(err.response?.data?.message || err.message);
+    throw new Error('Failed to update user profile (server)');
   }
 }
 
 /* ----------------- Notes ----------------- */
 export async function fetchNotesServer(
-  search = "",
+  search = '',
   page = 1,
   perPage = 12,
   tag?: string
 ): Promise<GetNotesResponse> {
   try {
-    const { data } = await api.get<GetNotesResponse>("/notes", {
+    const { data } = await api.get<GetNotesResponse>('/notes', {
       params: { search, page, perPage, tag },
       headers: await getCookieHeaders(),
     });
     return data;
   } catch (err: unknown) {
-    if (axios.isAxiosError(err)) throw new Error(err.response?.data?.message || err.message);
-    throw new Error("Failed to fetch notes (server)");
+    if (axios.isAxiosError(err))
+      throw new Error(err.response?.data?.message || err.message);
+    throw new Error('Failed to fetch notes (server)');
   }
 }
 
@@ -74,20 +97,22 @@ export async function getSingleNoteServer(id: string): Promise<Note> {
     });
     return data;
   } catch (err: unknown) {
-    if (axios.isAxiosError(err)) throw new Error(err.response?.data?.message || err.message);
-    throw new Error("Failed to fetch note (server)");
+    if (axios.isAxiosError(err))
+      throw new Error(err.response?.data?.message || err.message);
+    throw new Error('Failed to fetch note (server)');
   }
 }
 
 export async function createNoteServer(newNote: NewNote): Promise<Note> {
   try {
-    const { data } = await api.post<Note>("/notes", newNote, {
+    const { data } = await api.post<Note>('/notes', newNote, {
       headers: await getCookieHeaders(),
     });
     return data;
   } catch (err: unknown) {
-    if (axios.isAxiosError(err)) throw new Error(err.response?.data?.message || err.message);
-    throw new Error("Failed to create note (server)");
+    if (axios.isAxiosError(err))
+      throw new Error(err.response?.data?.message || err.message);
+    throw new Error('Failed to create note (server)');
   }
 }
 
@@ -98,7 +123,8 @@ export async function deleteNoteServer(id: string): Promise<Note> {
     });
     return data;
   } catch (err: unknown) {
-    if (axios.isAxiosError(err)) throw new Error(err.response?.data?.message || err.message);
-    throw new Error("Failed to delete note (server)");
+    if (axios.isAxiosError(err))
+      throw new Error(err.response?.data?.message || err.message);
+    throw new Error('Failed to delete note (server)');
   }
 }
