@@ -4,7 +4,7 @@ import type { Note, NewNote, GetNotesResponse } from '../../types/note';
 import type { User, RegisterData, LoginData } from '../../types/user';
 
 /* ----------------- Auth ----------------- */
-export async function registerUser(data: RegisterData): Promise<User> {
+export async function register(data: RegisterData): Promise<User> {
   try {
     const { data: user } = await api.post<User>('/auth/register', data);
     return user;

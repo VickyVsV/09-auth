@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerUser } from '@/lib/api/clientApi';
+import { register } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import { ApiError } from '@/app/api/api';
 import { RegisterData } from '@/types/user';
@@ -17,7 +17,7 @@ export default function SignUpPage() {
 
   const handleSubmit = async (formValues: RegisterData) => {
   try {
-    const res = await registerUser(formValues);
+    const res = await register(formValues);
     if (res) {
       setUser(res);
       router.push('/profile');
@@ -74,10 +74,8 @@ export default function SignUpPage() {
             Register
           </button>
         </div>
-
-        <p className={css.error}>Error</p>
       </form>
-      {error && <p>{error}</p>}
+      {error && <p className={css.error}>{error}</p>}
     </main>
   );
 }

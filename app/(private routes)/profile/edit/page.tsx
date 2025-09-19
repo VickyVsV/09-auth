@@ -9,11 +9,13 @@ import {
   updateUserProfileClient,
 } from '@/lib/api/clientApi';
 import type { User } from '@/types/user';
+import { useAuthStore } from '@/lib/store/authStore'; 
 
 export default function EditProfilePage() {
   const router = useRouter();
 
-  const [user, setUser] = useState<User | null>(null);
+  const setUser = useAuthStore((state) => state.setUser); 
+  const [user, setUserLocal] = useState<User | null>(null);
   const [username, setUsername] = useState('');
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function EditProfilePage() {
       try {
         const userData = await getUserProfileClient();
         if (userData) {
-          setUser(userData);
+          setUserLocal(userData);
           setUsername(userData.username || '');
         }
       } catch (error) {
@@ -35,7 +37,8 @@ export default function EditProfilePage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault(); // Предотвращаем перезагрузку страницы
     try {
-      await updateUserProfileClient({ username: username });
+      const updatedUser = await updateUserProfileClient({ username: username });
+      setUser(updatedUser);
       router.push('/profile');
     } catch (err) {
       console.error(err);

@@ -26,8 +26,19 @@ export default function NotePreviewClient({ id }: Props) {
     router.back(); // вернёт на список
   };
 
-  if (isLoading) return null;
-  if (error || !note) return null;
+  if (isLoading)
+    return (
+      <Modal onClose={handleClose}>
+        <p className={css.loading}>Loading note...</p>
+      </Modal>
+    );
+  if (error || !note)
+    return (
+      <Modal onClose={handleClose}>
+        <p className={css.error}>Error loading note: {error?.message ?? 'Unknown error occurred.'}</p>
+        <button onClick={handleClose}>Close</button>
+      </Modal>
+    );
 
   return (
     <Modal onClose={handleClose}>
